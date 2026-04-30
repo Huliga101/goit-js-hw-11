@@ -1,4 +1,34 @@
-export function createGalleryMarkup(images) {
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+const gallery = document.querySelector('.gallery');
+const loader = document.querySelector('.loader');
+
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
+export function renderGallery(images) {
+  const markup = createGalleryMarkup(images);
+
+  gallery.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
+}
+
+export function clearGallery() {
+  gallery.innerHTML = '';
+}
+
+export function showLoader() {
+  loader.classList.remove('hidden');
+}
+
+export function hideLoader() {
+  loader.classList.add('hidden');
+}
+
+function createGalleryMarkup(images) {
   return images
     .map(
       ({
@@ -12,7 +42,11 @@ export function createGalleryMarkup(images) {
       }) => `
       <li class="gallery-item">
         <a class="gallery-link" href="${largeImageURL}">
-          <img class="gallery-image" src="${webformatURL}" alt="${tags}" />
+          <img
+            class="gallery-image"
+            src="${webformatURL}"
+            alt="${tags}"
+          />
         </a>
         <div class="gallery-info">
           <p><b>Likes</b>${likes}</p>

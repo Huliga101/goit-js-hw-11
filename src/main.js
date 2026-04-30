@@ -1,21 +1,15 @@
-
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
 import { getImagesByQuery } from './js/pixabay-api.js';
-import { createGalleryMarkup } from './js/render-functions.js';
+import {
+  clearGallery,
+  hideLoader,
+  renderGallery,
+  showLoader,
+} from './js/render-functions.js';
 
 const form = document.querySelector('.form');
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
-
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
 
 form.addEventListener('submit', async event => {
   event.preventDefault();
@@ -30,8 +24,8 @@ form.addEventListener('submit', async event => {
     return;
   }
 
-  gallery.innerHTML = '';
-  loader.classList.remove('hidden');
+  clearGallery();
+  showLoader();
 
   try {
     const images = await getImagesByQuery(query);
@@ -45,15 +39,14 @@ form.addEventListener('submit', async event => {
       return;
     }
 
-    gallery.innerHTML = createGalleryMarkup(images);
-    lightbox.refresh();
+    renderGallery(images);
   } catch {
     iziToast.error({
       message: 'Something went wrong. Please try again later.',
       position: 'topRight',
     });
   } finally {
-    loader.classList.add('hidden');
+    hideLoader();
   }
 
   form.reset();
