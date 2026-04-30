@@ -1,5 +1,3 @@
-import fetchData from './js/pixabay-api'
-import fetchData from './js/render-functions'
 
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
